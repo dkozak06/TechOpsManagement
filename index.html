@@ -64,7 +64,7 @@
                 {id: 'capital', label: 'Capital'},
                 {id: 'trades', label: 'Trades'},
                 {id: 'profit', label: 'Profit'}
-            ],
+            ].map(i => ({ id: i })),
       links:  [
                 {source: 'capital', target: 'trades', label: 'positive'},
                 {source: 'trades', target: 'profit', label: 'positive'}
