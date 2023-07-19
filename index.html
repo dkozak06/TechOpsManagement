@@ -1,16 +1,52 @@
-No, like this:
-
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Process Diagram</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-</head>
 <body>
-    <div class="mermaid">
-        graph LR
-        -->|Capital| B[Trades]
-        B -->|Profit| 
-    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <svg id="diagram" width="500" height="150"></svg>
+
+    <script>
+    var svg = d3.select("#diagram");
+
+    var nodes = [
+        {id: 'capital', label: 'Capital', x: 50, y: 50},
+        {id: 'trades', label: 'Trades', x: 225, y: 50},
+        {id: 'profit', label: 'Profit', x: 400, y: 50}
+    ];
+
+    var links = [
+        {source: 'capital', target: 'trades', label: 'Input'},
+        {source: 'trades', target: 'profit', label: 'Process'}
+    ];
+
+    var rectangles = svg.selectAll("rect")
+        .data(nodes)
+        .enter()
+        .append("rect")
+        .attr("x", d => d.x)
+        .attr("y", d => d.y)
+        .attr("width", 100)
+        .attr("height", 50);
+
+    var labels = svg.selectAll("text")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .attr("x", d => d.x + 50)
+        .attr("y", d => d.y + 25)
+        .text(d => d.label)
+        .style("text-anchor", "middle")
+        .style("dominant-baseline", "middle");
+
+    var lines = svg.selectAll("line")
+        .data(links)
+        .enter()
+        .append("line")
+        .attr("x1", d => nodes.find(n => n.id == d.source).x + 100)
+        .attr("y1", d => nodes.find(n => n.id == d.source).y + 25)
+        .attr("x2", d => nodes.find(n => n.id == d.target).x)
+        .attr("y2", d => nodes.find(n => n.id == d.target).y + 25)
+        .style("stroke", "black")
+        .style("stroke-width", 2);
+    </script>
 </body>
 </html>
