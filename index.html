@@ -26,24 +26,19 @@
 
         ForceGraph()(document.getElementById('graph'))
             .graphData(graphData)
-            .nodeCanvasObject((node, ctx, globalScale) => {
-                const label = node.id;
-                const fontSize = 12/globalScale;
-                ctx.font = `${fontSize}px Sans-Serif`;
-                const textWidth = ctx.measureText(label).width;
-                const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
+                   .nodeCanvasObject((node, ctx) => nodePaint(node, getColor(node.id), ctx))
 
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = node.color;
-                ctx.fillText(label, node.x, node.y);
-            })
             .linkLabel('label')
             .nodeColor(() => 'blue')
             .linkColor(link => colorMap[link.label])
-            .linkDirectionalArrowLength(6)
+            .linkDirectionalArrowLength(6);
+
+        function nodePaint({ id, x, y }, color, ctx) {
+      ctx.fillStyle = color;
+      [
+        () => { ctx.font = '12px Sans-Serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(id, x, y); } // text
+      ][id%4]();
+    }
     </script>
 </body>
 </html>
