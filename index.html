@@ -14,16 +14,22 @@
                 {id: 'profit', label: 'Profit'}
             ],
             links: [
-                {source: 'capital', target: 'trades', label: 'Input'},
-                {source: 'trades', target: 'profit', label: 'Process'}
+                {source: 'capital', target: 'trades', label: 'positive'},
+                {source: 'trades', target: 'profit', label: 'positive'}
             ]
         };
+
+        var colorMap = {
+    "positive": 'green', // replace with your chosen color
+    "negative": 'red',   // replace with your chosen color
+};
 
         ForceGraph()(document.getElementById('graph'))
             .graphData(graphData)
             .nodeLabel(node => node.id)
             .linkLabel('label')
             .nodeColor(() => 'blue')
+            .linkColor(link => colorMap[link.label])
             .linkDirectionalParticles(2);
     </script>
 </body>
