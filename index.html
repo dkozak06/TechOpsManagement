@@ -26,15 +26,14 @@
 
         ForceGraph()(document.getElementById('graph'))
             .graphData(graphData)
-                   .nodeCanvasObject((node, ctx) => nodePaint(node, getColor(node.id), ctx))
+                   .nodeCanvasObject((node, ctx) => nodePaint(node, ctx))
 
             .linkLabel('label')
             .nodeColor(() => 'blue')
             .linkColor(link => colorMap[link.label])
             .linkDirectionalArrowLength(6);
 
-        function nodePaint({ id, x, y }, color, ctx) {
-      ctx.fillStyle = color;
+        function nodePaint({ id, x, y }, ctx) {
       [
         () => { ctx.font = '12px Sans-Serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(node.id, x, y); } // text
       ][id%4]();
