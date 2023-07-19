@@ -1,52 +1,33 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Process Diagram</title>
+    <script src="https://unpkg.com/jsplumb@2.15.5/dist/js/jsplumb.min.js"></script>
+    <style>
+        .process-step {
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100px;
+            text-align: center;
+            position: absolute;
+        }
+        #capital { top: 50px; left: 50px; }
+        #trades { top: 50px; left: 200px; }
+        #profit { top: 50px; left: 350px; }
+    </style>
+</head>
 <body>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <svg id="diagram" width="500" height="150"></svg>
+    <div id="capital" class="process-step">Capital</div>
+    <div id="trades" class="process-step">Trades</div>
+    <div id="profit" class="process-step">Profit</div>
 
     <script>
-    var svg = d3.select("#diagram");
-
-    var nodes = [
-        {id: 'capital', label: 'Capital', x: 50, y: 50},
-        {id: 'trades', label: 'Trades', x: 225, y: 50},
-        {id: 'profit', label: 'Profit', x: 400, y: 50}
-    ];
-
-    var links = [
-        {source: 'capital', target: 'trades', label: 'Input'},
-        {source: 'trades', target: 'profit', label: 'Process'}
-    ];
-
-    var rectangles = svg.selectAll("rect")
-        .data(nodes)
-        .enter()
-        .append("rect")
-        .attr("x", d => d.x)
-        .attr("y", d => d.y)
-        .attr("width", 100)
-        .attr("height", 50);
-
-    var labels = svg.selectAll("text")
-        .data(nodes)
-        .enter()
-        .append("text")
-        .attr("x", d => d.x + 50)
-        .attr("y", d => d.y + 25)
-        .text(d => d.label)
-        .style("text-anchor", "middle")
-        .style("dominant-baseline", "middle");
-
-    var lines = svg.selectAll("line")
-        .data(links)
-        .enter()
-        .append("line")
-        .attr("x1", d => nodes.find(n => n.id == d.source).x + 100)
-        .attr("y1", d => nodes.find(n => n.id == d.source).y + 25)
-        .attr("x2", d => nodes.find(n => n.id == d.target).x)
-        .attr("y2", d => nodes.find(n => n.id == d.target).y + 25)
-        .style("stroke", "black")
-        .style("stroke-width", 2);
+    jsPlumb.ready(function() {
+        var instance = jsPlumb.getInstance();
+        instance.connect({ source: "capital", target: "trades", label: "Input" });
+        instance.connect({ source: "trades", target: "profit", label: "Process" });
+    });
     </script>
 </body>
 </html>
