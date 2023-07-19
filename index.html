@@ -2,60 +2,29 @@
 <html>
 <head>
     <title>Process Diagram</title>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://unpkg.com/force-graph"></script>
 </head>
 <body>
-    <svg width="800" height="600"></svg>
+    <div id="graph"></div>
     <script>
-        var nodesData = [
-            {id: 'capital', label: 'Capital'},
-            {id: 'trades', label: 'Trades'},
-            {id: 'profit', label: 'Profit'}
-        ];
+        var graphData = {
+            nodes: [
+                {id: 'capital', label: 'Capital'},
+                {id: 'trades', label: 'Trades'},
+                {id: 'profit', label: 'Profit'}
+            ],
+            links: [
+                {source: 'capital', target: 'trades', label: 'Input'},
+                {source: 'trades', target: 'profit', label: 'Process'}
+            ]
+        };
 
-        var linksData = [
-            {source: 'capital', target: 'trades', label: 'Input'},
-            {source: 'trades', target: 'profit', label: 'Process'}
-        ];
-
-        var svg = d3.select("svg");
-        var width = +svg.attr("width");
-        var height = +svg.attr("height");
-
-        var simulation = d3.forceSimulation(nodesData)
-            .force("link", d3.forceLink(linksData).id(d => d.id))
-            .force("charge", d3.forceManyBody())
-            .force("center", d3.forceCenter(width / 2, height / 2));
-
-        var link = svg.append("g")
-            .selectAll("line")
-            .data(linksData)
-            .join("line");
-
-        var node = svg.append("g")
-            .selectAll("circle")
-            .data(nodesData)
-            .join("circle")
-            .attr("r", 20);
-
-        var label = svg.append("g")
-            .selectAll("text")
-            .data(nodesData)
-            .join("text")
-            .text(d => d.label);
-
-        simulation.on("tick", () => {
-            link.attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => d.target.x)
-                .attr("y2", d => d.target.y);
-
-            node.attr("cx", d => d.x)
-                .attr("cy", d => d.y);
-
-            label.attr("x", d => d.x)
-                .attr("y", d => d.y);
-        });
+        ForceGraph()(document.getElementById('graph'))
+            .graphData(graphData)
+            .nodeLabel('label')
+            .linkLabel('label')
+            .nodeColor(() => 'blue')
+            .linkDirectionalParticles(2);
     </script>
 </body>
 </html>
