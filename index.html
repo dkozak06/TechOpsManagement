@@ -69,6 +69,11 @@
                 {source: 'capital', target: 'trades', label: 'positive'},
                 {source: 'trades', target: 'profit', label: 'positive'}
             ]
+                .filter(id => id)
+        .map(id => ({
+          source: id,
+          target: Math.round(Math.random() * (id-1))
+        }))
     };
 
     // gen a number persistent color from around the palette
