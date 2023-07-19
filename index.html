@@ -21,7 +21,7 @@
 
         ForceGraph()(document.getElementById('graph'))
             .graphData(graphData)
-            .nodeLabel('label')
+            .nodeLabel(node => node.id)
             .linkLabel('label')
             .nodeColor(() => 'blue')
             .linkDirectionalParticles(2);
