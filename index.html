@@ -2,32 +2,60 @@
 <html>
 <head>
     <title>Process Diagram</title>
-    <script src="https://unpkg.com/jsplumb@2.15.5/dist/js/jsplumb.min.js"></script>
-    <style>
-        .process-step {
-            border: 1px solid black;
-            border-radius: 5px;
-            padding: 10px;
-            width: 100px;
-            text-align: center;
-            position: absolute;
-        }
-        #capital { top: 50px; left: 50px; }
-        #trades { top: 50px; left: 200px; }
-        #profit { top: 50px; left: 350px; }
-    </style>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 <body>
-    <div id="capital" class="process-step">Capital</div>
-    <div id="trades" class="process-step">Trades</div>
-    <div id="profit" class="process-step">Profit</div>
-
+    <svg width="800" height="600"></svg>
     <script>
-    jsPlumb.ready(function() {
-        var instance = jsPlumb.getInstance();
-        instance.connect({ source: "capital", target: "trades", label: "Input" });
-        instance.connect({ source: "trades", target: "profit", label: "Process" });
-    });
+        var nodesData = [
+            {id: 'capital', label: 'Capital'},
+            {id: 'trades', label: 'Trades'},
+            {id: 'profit', label: 'Profit'}
+        ];
+
+        var linksData = [
+            {source: 'capital', target: 'trades', label: 'Input'},
+            {source: 'trades', target: 'profit', label: 'Process'}
+        ];
+
+        var svg = d3.select("svg");
+        var width = +svg.attr("width");
+        var height = +svg.attr("height");
+
+        var simulation = d3.forceSimulation(nodesData)
+            .force("link", d3.forceLink(linksData).id(d => d.id))
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        var link = svg.append("g")
+            .selectAll("line")
+            .data(linksData)
+            .join("line");
+
+        var node = svg.append("g")
+            .selectAll("circle")
+            .data(nodesData)
+            .join("circle")
+            .attr("r", 20);
+
+        var label = svg.append("g")
+            .selectAll("text")
+            .data(nodesData)
+            .join("text")
+            .text(d => d.label);
+
+        simulation.on("tick", () => {
+            link.attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node.attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+
+            label.attr("x", d => d.x)
+                .attr("y", d => d.y);
+        });
     </script>
 </body>
 </html>
