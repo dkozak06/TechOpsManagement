@@ -60,13 +60,15 @@
     // Random tree
     const N = 20;
     const gData = {
-      nodes: [...Array(N).keys()].map(i => ({ id: i })),
-      links: [...Array(N).keys()]
-        .filter(id => id)
-        .map(id => ({
-          source: id,
-          target: Math.round(Math.random() * (id-1))
-        }))
+      nodes: [
+                {id: 'capital', label: 'Capital'},
+                {id: 'trades', label: 'Trades'},
+                {id: 'profit', label: 'Profit'}
+            ],
+      links:  [
+                {source: 'capital', target: 'trades', label: 'positive'},
+                {source: 'trades', target: 'profit', label: 'positive'}
+            ]
     };
 
     // gen a number persistent color from around the palette
